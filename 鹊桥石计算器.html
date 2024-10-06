@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>鹊桥石计算器</title>
+     <style>
+         body {
+             font-family: Arial, sans-serif;
+             margin: 20px;
+         }
+         .container {
+             border: 1px solid #ddd;
+             padding: 10px;
+             margin-bottom: 10px;
+         }
+         .result {
+             font-weight: bold;
+         }
+     </style>
+</head>
+<body>
+     <div class="container">
+         <h2>鹊桥石计算器</h2>
+         <label for="bridge-stones">拥有的鹊桥石数量：</label>
+         <input type="number" id="bridge-stones" placeholder="输入鹊桥石数量">
+         <button onclick="calculateStones()">计算</button>
+         <div id="result"></div>
+     </div>
+
+     <script>
+         // 计算剩余鹊桥石的函数
+         function calculateStones() {
+             var totalStones = parseInt(document.getElementById('bridge-stones').value); // 用户输入的鹊桥石数量
+             var numbers = [52, 66, 88, 99]; // 可用的数字数组
+             var best_combination = []; // 最佳组合
+             var best_remainder = totalStones; // 最佳余数初始化为用户输入的鹊桥石数量
+
+             // 遍历所有数字组合
+             for (var i = 0; i <= totalStones / numbers[0]; i++) {
+                 for (var j = 0; j <= totalStones / numbers[1]; j++) {
+                     for (var k = 0; k <= totalStones / numbers[2]; k++) {
+                         for (var l = 0; l <= totalStones / numbers[3]; l++) {
+                             var combo_sum = i * numbers[0] + j * numbers[1] + k * numbers[2] + l * numbers[3];
+                             if (combo_sum <= totalStones) {
+                                 var remainder = totalStones - combo_sum;
+                                 if (remainder < best_remainder) {
+                                     best_remainder = remainder;
+                                     best_combination = [i, j, k, l];
+                                 }
+                             }
+                         }
+                     }
+                 }
+             }
+
+             // 显示结果
+             var resultDiv = document.getElementById('result');
+             if (best_remainder === totalStones) {
+                 resultDiv.innerHTML = '<p>鹊桥石不足</p>';
+             } else {
+                 resultDiv.innerHTML = '<p>可以购买<br>' + best_combination[0] + '个幽兰香囊 <br> ' + best_combination[1] + '个流光彩带 <br> ' + best_combination[2] + '个琉璃玉佩 <br> ' + best_combination[3] + '个金风玉露</p>';
+                 resultDiv.innerHTML += '<p>剩余的鹊桥石: ' + best_remainder + '</p>';
+             }
+         }
+     </script>
+</body>
+</html>
